@@ -10,22 +10,26 @@ import (
 
 func Part1() {
 	sumValidGameID := 0
-	input := readInput("Day2/input1.txt")
+	sumSetPowers := 0
+	input := readInput("Day2/input.txt")
 
 	reBlue := regexp.MustCompile(`[0-9]+.blue`)
 	reRed := regexp.MustCompile(`[0-9]+.red`)
 	reGreen := regexp.MustCompile(`[0-9]+.green`)
 
 	for idx, line := range input {
-		numRedCubes := breakUpGames(reRed.FindAll(line, -1))
-		numBlueCubes := breakUpGames(reBlue.FindAll(line, -1))
-		numGreenCubes := breakUpGames(reGreen.FindAll(line, -1))
+		maxRedCubes := findMaxCubes(reRed.FindAll(line, -1))
+		maxBlueCubes := findMaxCubes(reBlue.FindAll(line, -1))
+		maxGreenCubes := findMaxCubes(reGreen.FindAll(line, -1))
 
-		if numRedCubes <= 12 && numBlueCubes <= 14 && numGreenCubes <= 13 {
+		if maxRedCubes <= 12 && maxBlueCubes <= 14 && maxGreenCubes <= 13 {
 			sumValidGameID += idx + 1
 		}
+
+		sumSetPowers += (maxRedCubes * maxBlueCubes * maxGreenCubes)
 	}
 	fmt.Println("Sum of game IDs;", sumValidGameID)
+	fmt.Println("Sum of set powers: ", sumSetPowers)
 }
 
 /* Read input from file and split into 2-D byte array */
@@ -47,8 +51,8 @@ func readInput(path string) [][]byte {
 	return input
 }
 
-/* Return number of cubes played for a given color */
-func breakUpGames(games [][]byte) int {
+/* Find greatest cubes played for a given color */
+func findMaxCubes(games [][]byte) int {
 	reNumGames := regexp.MustCompile(`[0-9]+`)
 	maxCubes := 0
 
