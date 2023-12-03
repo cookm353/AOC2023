@@ -4,11 +4,14 @@ import (
 	"bufio"
 	"fmt"
 	"os"
+	"strings"
+	"unicode"
 )
 
+var charMap = map[int]int{}
+
 func Part1() {
-	testInput := `
-	467..114..
+	testInput := `467..114..
 	...*......
 	..35..633.
 	......#...
@@ -19,7 +22,15 @@ func Part1() {
 	...$.*....
 	.664.598..`
 
-	fmt.Println(testInput)
+	test := strings.Split(testInput, "\n")
+
+	for i, line := range test {
+		for _, char := range line {
+			fmt.Println(unicode.IsSymbol(rune(char)), string(char))
+		}
+		fmt.Println(i, strings.TrimSpace(line))
+	}
+	// fmt.Println(testInput)
 }
 
 func readInput(path string) [][]byte {
@@ -39,3 +50,19 @@ func readInput(path string) [][]byte {
 
 	return input
 }
+
+/*
+Read input
+Loop over each line
+	for i, line := range lines
+Find indices of each symbol
+		for j, char := range line
+			if char is a symbol
+
+
+Check if there are numbers
+
+hash map
+	key holds i
+	val holds array of j
+*/

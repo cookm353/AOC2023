@@ -21,7 +21,7 @@ var DigitMap = map[string]string{
 	"nine":  "n9e",
 }
 
-func Part1() int {
+func Part1() {
 	fileName := "Day1/input1.txt"
 	lines := getLines(fileName)
 
@@ -39,7 +39,7 @@ func Part1() int {
 		sumCalibrationValues += calibrationValue
 	}
 
-	return sumCalibrationValues
+	fmt.Println("Sum of calibration values:", sumCalibrationValues)
 }
 
 /* Read text from input file */
@@ -118,6 +118,8 @@ func FindCalibrationValue(lines []string) int {
 	for _, num := range calibrationValues {
 		sumCalibrationValues += num
 	}
+
+	fmt.Println("Sum of calibration values:", sumCalibrationValues)
 
 	return sumCalibrationValues
 }
