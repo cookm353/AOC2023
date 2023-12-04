@@ -8,7 +8,7 @@ import (
 	"unicode"
 )
 
-var DigitMap = map[string]string{
+var digitMap = map[string]string{
 	"zero":  "z0o",
 	"one":   "o1e",
 	"two":   "t2o",
@@ -22,15 +22,22 @@ var DigitMap = map[string]string{
 }
 
 func Part1() {
-	fileName := "Day1/input1.txt"
+	fileName := "Day1/input.txt"
 	lines := getLines(fileName)
+	// someLines := lines[:10]
 
 	calibrationValues := []int{}
 
 	for _, line := range lines {
+		// for _, line := range someLines {
+		fmt.Println("original line:", line)
+		line = strings.ToLower(line)
 		line = convertNumbers(line)
+		fmt.Println("converted numbers:", line)
 		digits := getDigits(line)
+		fmt.Println("digits:", digits)
 		calibrationValues = append(calibrationValues, getCalibrationValue(digits))
+		fmt.Println("calibration value:", getCalibrationValue(digits))
 	}
 
 	sumCalibrationValues := 0
@@ -55,7 +62,7 @@ func getLines(fileName string) []string {
 
 /* Convert spelled out number to digit (three to 3) */
 func convertNumbers(line string) string {
-	for k, v := range DigitMap {
+	for k, v := range digitMap {
 		if strings.Contains(line, k) {
 			line = strings.ReplaceAll(line, k, v)
 		}
@@ -90,7 +97,7 @@ func FindCalibrationValue(lines []string) int {
 		digits := []rune{}
 
 		// Convert to digits
-		for k, v := range DigitMap {
+		for k, v := range digitMap {
 			if strings.Contains(line, k) {
 				line = strings.ReplaceAll(line, k, v)
 			}
