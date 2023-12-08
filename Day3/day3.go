@@ -13,24 +13,24 @@ import (
 func Part1() {
 	/*
 		testInput := `467..114..
-		...*......
-		..35..633.
-		......#...
-		617*......
-		.....+.58.
-		..592.....
-		......755.
-		...$.*....
-		.664.598..`
+			...*......
+			..35..633.
+			......#...
+			617*......
+			.....+.58.
+			..592.....
+			......755.
+			...$.*....
+			.664.598..`
 
 		inputStr := strings.Split(testInput, "\n")
-		partNumbers := []int{}
 	*/
 	input := readInput("Day3/input.txt")
 	partNumbers := []int{}
 
 	for i, line := range input {
 		// symbols := []string{}
+		fmt.Println(string(line))
 		lineSymbols := ""
 		for j, char := range line {
 			adjacentNumbers := []int{}
@@ -46,11 +46,14 @@ func Part1() {
 				partNumbers = append(partNumbers, num)
 			}
 		}
-		fmt.Println(string(line))
-		fmt.Println(lineSymbols)
-		fmt.Println()
 		lineSymbols = ""
 	}
+
+	var sum int
+	for partNumber := range partNumbers {
+		sum += partNumber
+	}
+	fmt.Println("Sum", sum)
 }
 
 func readInput(path string) [][]byte {
@@ -96,7 +99,6 @@ func findNumbers(i, j int, input [][]byte) []int {
 
 	// Loop over all adjacent elements, find any numbers, and add to slice
 	for _, iIdx := range iVals {
-		// inMiddle := false
 		for _, jIdx := range jVals {
 			char := input[iIdx][jIdx]
 			if unicode.IsNumber(rune(char)) {
@@ -104,8 +106,7 @@ func findNumbers(i, j int, input [][]byte) []int {
 				right := jIdx
 
 				if j == jIdx {
-
-					fmt.Println("foo")
+					break
 				}
 
 				for left > 0 && unicode.IsNumber(rune(input[iIdx][left-1])) {
@@ -117,14 +118,7 @@ func findNumbers(i, j int, input [][]byte) []int {
 				}
 
 				partNum, _ := strconv.Atoi(string(input[iIdx][left : right+1]))
-				fmt.Println("part number:", partNum)
-				fmt.Println()
 				partNums = append(partNums, partNum)
-
-				if left == j || right == j {
-					fmt.Println("bar")
-					break
-				}
 			}
 		}
 	}

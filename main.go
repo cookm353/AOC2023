@@ -8,14 +8,6 @@ import (
 	day3 "github.com/cookm353/AdventOfCode/2023/Day3"
 )
 
-type foo interface {
-	int | float64
-}
-
-func add[T foo](a, b T) T {
-	return a + b
-}
-
 func main() {
 	fmt.Println("Day 1")
 	fmt.Println("-----")
@@ -27,5 +19,4 @@ func main() {
 	fmt.Println("-----")
 	day3.Part1()
 
-	fmt.Println(add(3.141, 69))
 }
