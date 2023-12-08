@@ -5,62 +5,52 @@ import (
 	"fmt"
 	"os"
 	"strconv"
-	"strings"
 	"unicode"
 )
 
 // var charMap = map[int]int{}
 
 func Part1() {
-	testInput := `467..114..
-	...*......
-	..35..633.
-	......#...
-	617*......
-	.....+.58.
-	..592.....
-	......755.
-	...$.*....
-	.664.598..`
+	/*
+		testInput := `467..114..
+		...*......
+		..35..633.
+		......#...
+		617*......
+		.....+.58.
+		..592.....
+		......755.
+		...$.*....
+		.664.598..`
 
-	input := strings.Split(testInput, "\n")
+		inputStr := strings.Split(testInput, "\n")
+		partNumbers := []int{}
+	*/
+	input := readInput("Day3/input.txt")
 	partNumbers := []int{}
 
 	for i, line := range input {
-		isPartNumber := false
-		currNumber := ""
-		fmt.Println(strings.TrimSpace(line))
+		// symbols := []string{}
+		lineSymbols := ""
 		for j, char := range line {
-
-			// Build string for current number
-			if unicode.IsNumber(char) {
-				currNumber += string(char)
-
-				if !isPartNumber {
-					isPartNumber = checkIfValid(i, j, input)
-				}
+			adjacentNumbers := []int{}
+			currChar := rune(char)
+			if (unicode.IsPunct(currChar) && string(currChar) != ".") || unicode.IsSymbol(currChar) {
+				fmt.Println(string(currChar))
+				adjacentNumbers = findNumbers(i, j, input)
+				lineSymbols += string(currChar)
 			}
-			// Check if complete number is a part number
-			if currNumber != "" && (!unicode.IsNumber(char) || j == len(line)-1) {
-				partNumber, _ := strconv.Atoi(currNumber)
-				currNumber = ""
-				fmt.Println(partNumber, isPartNumber)
 
-				if isPartNumber {
-					partNumbers = append(partNumbers, partNumber)
-				}
-				isPartNumber = false
+			for _, num := range adjacentNumbers {
+				fmt.Println("Adjacent numbers:", num)
+				partNumbers = append(partNumbers, num)
 			}
 		}
+		fmt.Println(string(line))
+		fmt.Println(lineSymbols)
 		fmt.Println()
+		lineSymbols = ""
 	}
-
-	var sum int
-	fmt.Println(partNumbers)
-	for _, partNumber := range partNumbers {
-		sum += partNumber
-	}
-	fmt.Println(sum)
 }
 
 func readInput(path string) [][]byte {
@@ -79,6 +69,67 @@ func readInput(path string) [][]byte {
 	}
 
 	return input
+}
+
+/* Find numbers adjacent to character */
+func findNumbers(i, j int, input [][]byte) []int {
+	partNums := []int{}
+	iMax := len(input) - 1
+	jMax := len(input[0]) - 1
+
+	iVals := []int{i}
+	jVals := []int{j}
+
+	// Build arrays of valid adjacent indices
+	if i > 0 {
+		iVals = append(iVals, i-1)
+	}
+	if i < iMax {
+		iVals = append(iVals, i+1)
+	}
+	if j > 0 {
+		jVals = append(jVals, j-1)
+	}
+	if j < jMax {
+		jVals = append(jVals, j+1)
+	}
+
+	// Loop over all adjacent elements, find any numbers, and add to slice
+	for _, iIdx := range iVals {
+		// inMiddle := false
+		for _, jIdx := range jVals {
+			char := input[iIdx][jIdx]
+			if unicode.IsNumber(rune(char)) {
+				left := jIdx
+				right := jIdx
+
+				if j == jIdx {
+
+					fmt.Println("foo")
+				}
+
+				for left > 0 && unicode.IsNumber(rune(input[iIdx][left-1])) {
+					left--
+				}
+
+				for right < jMax && unicode.IsNumber(rune(input[iIdx][right+1])) {
+					right++
+				}
+
+				partNum, _ := strconv.Atoi(string(input[iIdx][left : right+1]))
+				fmt.Println("part number:", partNum)
+				fmt.Println()
+				partNums = append(partNums, partNum)
+
+				if left == j || right == j {
+					fmt.Println("bar")
+					break
+				}
+			}
+		}
+	}
+
+	return partNums
 }
 
 /* Check surrounding  */
